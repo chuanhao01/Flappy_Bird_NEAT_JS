@@ -1,10 +1,24 @@
 let population = new Population();
 
-let total_pop = 200,
+let total_pop = 50,
 mutation_rate = 0.005;
 
-population.init(total_pop, mutation_rate);
-population.firstGen(5, 1);
+// let new_node = new Node();
+// console.log(new_node);
+// new_node.init(6, 'hidden', 1);
+// let new_connection_1 = new Connection(),
+// new_connection_2 = new Connection();
+// new_connection_1.init(1, 6, 0.3, true);
+// new_connection_2.init(6, 4, 0.5, true);
+// genome.connections_list[0].enabled = false;
+// genome.connections_list[1].enabled = false;
+// genome.connections_list[3].enabled = false;
+// genome.connections_list[5].enabled = false;
+// genome.connections_list.push(new_connection_1);
+// genome.connections_list.push(new_connection_2);
+// genome.nodes_list.push(new_node);
+// genome.feedForward([1, 2, 3]);
+// console.log(genome.nodes_list[0].getOutput());
 
 // for(let genome of population.population){
 //     genome.feedForward([1, 2, 3, 4]);
@@ -13,8 +27,8 @@ population.firstGen(5, 1);
 //     }
 // }
 
-let genome = population.population[0];
-console.log(genome);
+// let genome = population.population[0];
+// console.log(genome);
 // let new_node = new Node();
 // new_node.init(6, 'hidden', 1);
 // let new_connection_1 = new Connection(),
@@ -29,22 +43,7 @@ console.log(genome);
 // genome.connections_list.push(new_connection_2);
 // genome.node_list.push(new_node);
 
-console.log(genome.node_list[4].getOutput());
 
-function testGame(game, population){
-    for(let i=0; i<game.birds.length; i++){
-        console.log(population[i]);
-        if(game.birds[i].enabled){
-            population[i].feedForward([game.birds[i].y / 600, game.birds[i].vel, game.pipes[0].x / 400, game.pipes[0].top / 600, game.pipes[0].bottom / 600]);
-            if(population[i].getOutput() > 0.9){
-                game.birds[i].birdJump();
-            }
-        }
-        else{
-            population[i].score = game.birds[i].game_score;
-        }
-    }
-}
 
 // function testFunction(game, genome){
 //     genome.feedForward([game.bird.y, game.bird.vel, game.pipes[0].x, game.pipes[0].top || 1, game.pipes[0].bottom || 1]);
@@ -103,20 +102,28 @@ function testGame(game, population){
 
 function setup(){
     createCanvas(400, 600);
-    Game.init();
-    Game.setUpGame(population.population);
+    // Game.init();
+    population.init(total_pop, mutation_rate);
+    population.firstGen(2, 1);
+    // Game.setUpBirds(population.population);
+
+    let birds = population.population;
+    for(let bird of birds){
+        console.log(bird.brain.connections_list[0].weight);
+    }
+    let bird = birds[0];
+
+    console.log(bird);
+    let genome = bird.brain;
+    
+    console.log(genome);
 }
+
 
 let check = false
 
 function draw(){
     background(0);
-    if(frameCount % 50 === 0){
-        check = true
-    }
-    if(check && frameCount % 20 === 0){
-        testGame(Game, population.population);
-    }
-    Game.updateFrame();
+    // Game.updateFrame();
 }
 

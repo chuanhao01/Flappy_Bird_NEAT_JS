@@ -4,6 +4,7 @@ function Genome(){
         this.node_list = node_list;
         this.connections_list = connections_list;
         this.max_layer = this.findMaxLayer();
+        this.ori_score = 0;
     };
     this.findMaxLayer = function(){
         let max_layer = this.node_list[0].layer_num;
@@ -43,7 +44,8 @@ function Genome(){
     }
     this.feedForward = function(inputs){
         for(let i=0; i<inputs.length; i++){
-            this.node_list[i].addInput(inputs[i]);
+            this.node_list[i].input_sum = inputs[i]
+            // this.node_list[i].addInput(inputs[i]);
         }
         for(let i=0; i<this.node_list.length; i++){
             let node = this.node_list[i];
@@ -69,4 +71,11 @@ function Genome(){
             }
         }
     };
+    this.getOutput = function(){
+        for(let node of this.node_list){
+            if(node.type === 'output'){
+                return node.getOutput();
+            }
+        }
+    }
 }
