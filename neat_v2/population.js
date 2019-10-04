@@ -7,6 +7,24 @@ function Population(){
         this.population = [];
         // For generating the first generation
     };
+    this.whatFunc = function(input_nodes_list,  output_nodes_list, input_nodes_list){
+        let starting_connection_list = [];
+        for(let i=0; i<input_nodes_list.length; i++){
+            let input_node = input_nodes_list[i];
+            for(let j=0; j<output_nodes_list.length; j++){
+                let output_node = output_nodes_list[j];
+                let connection = new Connection();
+                let weight = (Math.random() * 4) - 2;
+                console.log(weight);
+                connection.init(input_node.node_number, output_node.node_number, weight, true);
+                connection.setInnovationNumber(this.global_innovation_number);
+                this.global_innovation_number++;
+                starting_connection_list.push(connection);
+            }
+        }
+        return starting_connection_list;
+
+    };
     this.firstGen = function(input_nodes, output_nodes){
         let starting_node_list = []
         let input_nodes_list = [],
@@ -31,26 +49,28 @@ function Population(){
         // Goes taking one input and getting the connection to all outputs
         // We are assuming that all of these connection are unique
         // Thus the global innovation number increase for each connection
-        for(let i=0; i<input_nodes_list.length; i++){
-            let input_node = input_nodes_list[i];
-            for(let j=0; j<output_nodes_list.length; j++){
-                let output_node = output_nodes_list[j];
-                let connection = new Connection();
-                let weight = (Math.random() * 4) - 2;
-                console.log(weight);
-                connection.init(input_node.node_number, output_node.node_number, weight, true);
-                connection.setInnovationNumber(this.global_innovation_number);
-                this.global_innovation_number++;
-                starting_connection_list.push(connection);
-                this.global_connections_list.push(connection);
-            }
-        }
-        this.global_connections_list.push(starting_connection_list);
+        // for(let i=0; i<input_nodes_list.length; i++){
+        //     let input_node = input_nodes_list[i];
+        //     for(let j=0; j<output_nodes_list.length; j++){
+        //         let output_node = output_nodes_list[j];
+        //         let connection = new Connection();
+        //         let weight = (Math.random() * 4) - 2;
+        //         console.log(weight);
+        //         connection.init(input_node.node_number, output_node.node_number, weight, true);
+        //         connection.setInnovationNumber(this.global_innovation_number);
+        //         this.global_innovation_number++;
+        //         starting_connection_list.push(connection);
+        //         this.global_connections_list.push(connection);
+        //     }
+        // }
+        // this.global_connections_list.push(starting_connection_list);
+
         let population = [];
         for(let i=0; i<this.total_pop; i++){
             gravity = 0.6;
             lift = -20;
             air_res = 0.9;
+            let starting_connection_list = this.whatFunc(input_nodes_list, output_nodes_list, input_nodes_list);
             let bird = new Bird(gravity, lift, air_res);
             bird.generateBrain(true, {
                 mutation_rate: this.mutation_rate,

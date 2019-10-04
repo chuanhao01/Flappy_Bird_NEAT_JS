@@ -126,17 +126,6 @@ const Game = {
     setUpBirds(population){
         this.birds = population;
     },
-    updateFrame(){
-        if(!this.game_done){
-            this.time++;
-            if(frameCount % 20 === 0){
-                console.log('what')
-                let pipe = new Pipe(this.gap_size, this.w, this.speed);
-                pipe.createPipe();
-                this.pipes.push(pipe);
-            }
-        }
-    }
     // updateFrame(){
     //     if(!this.game_done){
     //         this.time++;
@@ -146,45 +135,56 @@ const Game = {
     //             pipe.createPipe();
     //             this.pipes.push(pipe);
     //         }
-    //         for(let i=0; i<this.birds.length; i++){
-    //             this.birds[i].think();
-    //             // console.log(this.birds[i].brain);
-    //             if(this.birds[i].enabled){
-    //                 if(this.birds[i].checkCollision()){
-    //                     this.birds[i].updateBird();
-    //                 }
-    //                 else{
-    //                     this.birds[i].game_score = this.time;
-    //                     this.birds[i].enabled = false;
-    //                 }
-    //             }
-    //         }
-    //         for(let i = this.pipes.length - 1; i >= 0; i--){
-    //             if(this.pipes[i].pipeOffScreen()){
-    //                 this.pipes.splice(i, 1);
-    //             }
-    //             else{
-    //                 for(let j=this.birds.length - 1; j>=0; j--){
-    //                     if(this.birds[j].enabled){
-    //                         if(this.pipes[i].checkCollision(this.birds[j]) === false){
-    //                             this.birds[j].game_score = this.time;
-    //                             this.birds[j].enabled = false;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //             this.pipes[i].drawPipe();
-    //         }
-    //         let game_done = true;
-    //         for(let bird of this.birds){
-    //             if(bird.enabled){
-    //                 bird.drawBird();
-    //                 game_done = false;
-    //             }
-    //         }
-    //         console.log(game_done);
-    //         this.game_done = game_done;
     //     }
     // }
+    updateFrame(){
+        if(!this.game_done){
+            this.time++;
+            if(frameCount % 20 === 0){
+                console.log('what')
+                let pipe = new Pipe(this.gap_size, this.w, this.speed);
+                pipe.createPipe();
+                this.pipes.push(pipe);
+            }
+            for(let i=0; i<this.birds.length; i++){
+                this.birds[i].think();
+                // console.log(this.birds[i].brain);
+                if(this.birds[i].enabled){
+                    if(this.birds[i].checkCollision()){
+                        this.birds[i].updateBird();
+                    }
+                    else{
+                        this.birds[i].game_score = this.time;
+                        this.birds[i].enabled = false;
+                    }
+                }
+            }
+            for(let i = this.pipes.length - 1; i >= 0; i--){
+                if(this.pipes[i].pipeOffScreen()){
+                    this.pipes.splice(i, 1);
+                }
+                else{
+                    for(let j=this.birds.length - 1; j>=0; j--){
+                        if(this.birds[j].enabled){
+                            if(this.pipes[i].checkCollision(this.birds[j]) === false){
+                                this.birds[j].game_score = this.time;
+                                this.birds[j].enabled = false;
+                            }
+                        }
+                    }
+                }
+                this.pipes[i].drawPipe();
+            }
+            let game_done = true;
+            for(let bird of this.birds){
+                if(bird.enabled){
+                    bird.drawBird();
+                    game_done = false;
+                }
+            }
+            console.log(game_done);
+            this.game_done = game_done;
+        }
+    }
 }
 
