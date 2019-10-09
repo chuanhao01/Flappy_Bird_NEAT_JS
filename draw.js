@@ -1,7 +1,7 @@
 let population = new Population();
 
-let total_pop = 50,
-mutation_rate = 0.05;
+let total_pop = 100,
+mutation_rate = 0.5;
 
 // let new_node = new Node();
 // console.log(new_node);
@@ -139,6 +139,7 @@ function draw(){
     background(0);
     let is_game_done = Game.updateFrame();
     if(is_game_done){
+        console.log(population.population.length, 'whattt');
         population.generateSpecies();
         population.prunePopulation();
         population.setAdjustedScores();

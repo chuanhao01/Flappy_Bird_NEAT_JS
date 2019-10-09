@@ -82,6 +82,7 @@ function Species(){
         this.all_birds.push(this.represent_bird);
     };
     this.addGenome = function(bird){
+        // console.log('nonono i dont lik')
         this.all_birds.push(bird);
     };
 }

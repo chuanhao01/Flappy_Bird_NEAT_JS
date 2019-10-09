@@ -173,8 +173,13 @@ const Game = {
     updateFrame(){
         if(!this.game_done){
             this.time++;
-            if(frameCount % 75 === 0){
-                // console.log('It\'s a me, Mario');
+            // if(frameCount % 75 === 0){
+            //     // console.log('It\'s a me, Mario');
+            //     let pipe = new Pipe(this.gap_size, this.w, this.speed);
+            //     pipe.createPipe();
+            //     this.pipes.push(pipe);
+            // }
+            if(this.pipes[this.pipes.length - 1].x < width - 200){
                 let pipe = new Pipe(this.gap_size, this.w, this.speed);
                 pipe.createPipe();
                 this.pipes.push(pipe);

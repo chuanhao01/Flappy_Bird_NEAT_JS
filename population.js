@@ -12,7 +12,7 @@ function Population(){
         this.c1 = 1;
         this.c2 = 1;
         this.c3 = 1;
-        this.compatibility_threshold = 1;
+        this.compatibility_threshold = 2;
         this.prune_percentage = 0.15;
         this.generation = 1;
         // For generating the first generation
@@ -97,8 +97,7 @@ function Population(){
          
     };
     this.getDistance = function(genome_a, genome_b){
-        let disjoint = 0,
-        excess = 0,
+        let different_connections = 0,
         total_w_diff = 0;
         let a_index = 0, 
         b_index = 0;
@@ -107,15 +106,34 @@ function Population(){
         let a_connection_len = a_connections.length,
         b_connection_len = b_connections.length;
         let same_connections_number = 0;
+        // console.log('I should be ending my life after this')
         while(true){
-            // console.log(a_connections);
-            // console.log(a_connections[a_index].innovation_number, 'i will be back')
-            // console.log(b_connections[b_index].innovation_number, 'I am beeee')
-            // console.log(a_index, b_index)
-            // console.log(a_connection_len-1, 'he')
+            if(a_index === a_connection_len && b_index === b_connection_len){
+                break;
+            }
+            else if(a_index === a_connection_len){
+                if(a_connections[a_index - 1].innovation_number === b_connections[b_index].innovation_number){
+                    total_w_diff = Math.abs(a_connections[a_index - 1].weight - b_connections[b_index].weight);
+                    b_index++;
+                    same_connections_number++;
+                }
+                else{
+                    different_connections++;
+                    b_index++;
+                }
+            }
+            else if(b_index === b_connection_len){
+                if(a_connections[a_index].innovation_number === b_connections[b_index - 1].innovation_number){
+                    total_w_diff = Math.abs(a_connections[a_index].weight - b_connections[b_index - 1].weight);
+                    a_index++;
+                    same_connections_number++;
+                }
+                else{
+                    different_connections++;
+                    a_index++;
+                }
+            }
             if(a_index !== a_connection_len && b_index !== b_connection_len){
-                // console.log(a_index, a_connection_len, 'nnananan')
-                // console.log(b_index, b_connection_len, 'nbnbnbnbnb');
                 if(a_connections[a_index].innovation_number === b_connections[b_index].innovation_number){
                     total_w_diff = Math.abs(a_connections[a_index].weight - b_connections[b_index].weight);
                     a_index++;
@@ -123,37 +141,16 @@ function Population(){
                     same_connections_number++;
                 }
                 else if(a_connections[a_index].innovation_number < b_connections[b_index].innovation_number){
-                    disjoint++;
-                    if(a_index !== a_connection_len - 1){
-                        a_index++;
-                    }
-                }
-                else if(a_connections[a_index].innovation_number > b_connections[b_index].innovation_number){
-                    if(b_index === b_connection_len - 1){
-                        excess++;
-                    }
-                    else{
-                        disjoint++;
-                        b_index++;
-                    }
-                }
-            }
-            else{
-                if(a_index === a_connection_len && b_index === b_connection_len){
-                    break;
-                }
-                else if(a_index === a_connection_len){
-                    excess++;
-                    b_index++;
-                }
-                else if(b_index === b_connection_len){
-                    disjoint++;
+                    different_connections++;
                     a_index++;
                 }
+                else if(a_connections[a_index].innovation_number > b_connections[b_index].innovation_number){
+                    different_connections++;
+                    b_index++;
+                }
             }
-            // console.log(a_index, a_connection_len, 'noooooo');
-            // console.log(b_index, b_connection_len, 'nbnbnbnbnbnbn');
         }
+        // console.log('i hate the end of timeeee')
         let N = 1;
         if(a_connection_len >= 20 || b_connection_len >= 20){
             if(a_connection_len >= b_connection_len){
@@ -163,14 +160,96 @@ function Population(){
                 N = b_connection_len;
             }
         }
-        // console.log(disjoint)
-        // console.log(excess)
-        // console.log(total_w_diff)
-        // console.log(same_connections_number);
-        let distance = ((this.c1 * excess) / N) + ((this.c2 * disjoint) / N) + (this.c3 * (total_w_diff / same_connections_number));
-        // console.log(distance);
+        let distance = ((this.c1 * different_connections)/N) + (this.c3 * (total_w_diff / same_connections_number));
         return distance;
-    }
+
+    };
+    // this.getDistance = function(genome_a, genome_b){
+    //     // console.log('hello 1212')
+    //     let disjoint = 0,
+    //     excess = 0,
+    //     total_w_diff = 0;
+    //     let a_index = 0, 
+    //     b_index = 0;
+    //     let a_connections = genome_a.connections_list,
+    //     b_connections = genome_b.connections_list;
+    //     let a_connection_len = a_connections.length,
+    //     b_connection_len = b_connections.length;
+    //     let same_connections_number = 0;
+    //     while(true){
+    //         // console.log(a_connections);
+    //         // console.log(a_connections[a_index].innovation_number, 'i will be back')
+    //         // console.log(b_connections[b_index].innovation_number, 'I am beeee')
+    //         // console.log(a_index, b_index)
+    //         // // console.log(a_connection_len-1, 'he')
+    //         // console.log('hello 9000')
+    //         // console.log(a_index, a_connection_len, 'nnananan')
+    //         // console.log(b_index, b_connection_len, 'nbnbnbnbnb');
+    //         if(a_index !== a_connection_len && b_index !== b_connection_len){
+    //             // console.log('inside')
+    //             // console.log(a_index, a_connection_len, 'nnananan')
+    //             // console.log(b_index, b_connection_len, 'nbnbnbnbnb');
+    //             if(a_connections[a_index].innovation_number === b_connections[b_index].innovation_number){
+    //                 total_w_diff = Math.abs(a_connections[a_index].weight - b_connections[b_index].weight);
+    //                 a_index++;
+    //                 b_index++;
+    //                 same_connections_number++;
+    //             }
+    //             else if(a_connections[a_index].innovation_number < b_connections[b_index].innovation_number){
+    //                 disjoint++;
+    //                 if(a_index !== a_connection_len){
+    //                     a_index++;
+    //                 }
+    //             }
+    //             else if(a_connections[a_index].innovation_number > b_connections[b_index].innovation_number){
+    //                 if(b_index === b_connection_len){
+    //                     excess++;
+    //                 }
+    //                 else{
+    //                     disjoint++;
+    //                     b_index++;
+    //                 }
+    //             }
+    //         }
+    //         else{
+    //             if(a_index === a_connection_len && b_index === b_connection_len){
+    //             // console.log('hello break')
+    //                 break;
+    //             }
+    //             else if(a_index === a_connection_len){
+    //                 excess++;
+    //                 b_index++;
+    //             }
+    //             else if(b_index === b_connection_len){
+    //                 disjoint++;
+    //                 a_index++;
+    //             }
+    //         }
+    //         // console.log(a_index, a_connection_len, 'noooooo');
+    //         // console.log(b_index, b_connection_len, 'nbnbnbnbnbnbn');
+    //     }
+    //     let N = 1;
+    //     if(a_connection_len >= 20 || b_connection_len >= 20){
+    //         if(a_connection_len >= b_connection_len){
+    //             N = a_connection_len;
+    //         }
+    //         else{
+    //             N = b_connection_len;
+    //         }
+    //     }
+    //     // console.log(N);
+    //     // console.log(disjoint)
+    //     // console.log(excess)
+    //     // console.log(total_w_diff)
+    //     // console.log(same_connections_number);
+    //     let distance = ((this.c1 * excess) / N) + ((this.c2 * disjoint) / N) + (this.c3 * (total_w_diff / same_connections_number));
+    //     // console.log(distance);
+    //     // console.log(this.mating_pool)
+    //     // console.log(this.global_connections_list)
+    //     // console.log(this.global_mutation)
+    //     // console.log(this.species)
+    //     return distance;
+    // };
     this.generateSpecies = function(){
         let species = [];
         for(let bird of this.population){
@@ -180,14 +259,18 @@ function Population(){
                 species.push(first_species);
             }
             else{
+                // console.log('its happening');
                 let shortest_index = 0,
                 shortest_distance = this.getDistance(species[shortest_index].represent_bird.brain, bird.brain);
+                // console.log('whut')
                 for(let i=0; i<species.length; i++){
+                    // console.log(species[i].represent_bird === bird)
                     let distance = this.getDistance(species[i].represent_bird.brain, bird.brain);
                     // console.log(distance);
                     if(distance < shortest_distance){
                         shortest_distance = distance;
                         shortest_index = i;
+                        // console.log('i lik 1')
                     }
                 }
                 // console.log('Showing shortest');
@@ -196,12 +279,15 @@ function Population(){
                     let new_spec = new Species();
                     new_spec.init(bird);
                     species.push(new_spec);
+                    // console.log('i lik 2')
                 }
                 else{
                     species[shortest_index].addGenome(bird);
+                    // console.log('i lik 3')
                 }
                 // console.log('Boop \n');
             }
+            // console.log(species);
         }
         // console.log(species);
         this.species = species;
@@ -339,15 +425,15 @@ function Population(){
         child_bird.mutateSecondAddConnection(final_add_connections);
     };
     this.mutateBird = function(child_bird){
-        let first_mutate_nodes_list = child_bird.mutateFirstAddNode();
-        if(first_mutate_nodes_list !== null){
-            this.mutateSecondAddNode(child_bird, first_mutate_nodes_list);
-        }
-        let first_mutate_connection_list = child_bird.mutateFirstAddConnection();
-        if(first_mutate_connection_list !== null){
-            this.mutateSecondAddConnection(child_bird, first_mutate_connection_list);
-            // console.log(first_mutate_connection_list);
-        }
+        // let first_mutate_nodes_list = child_bird.mutateFirstAddNode();
+        // if(first_mutate_nodes_list !== null){
+        //     this.mutateSecondAddNode(child_bird, first_mutate_nodes_list);
+        // }
+        // let first_mutate_connection_list = child_bird.mutateFirstAddConnection();
+        // if(first_mutate_connection_list !== null){
+        //     this.mutateSecondAddConnection(child_bird, first_mutate_connection_list);
+        //     // console.log(first_mutate_connection_list);
+        // }
         child_bird.mutateRest();
 
     };
@@ -362,6 +448,11 @@ function Population(){
         }
         this.population = new_population;
         console.log('Generation:', this.generation);
+        console.log(this.global_connections_list);
+        console.log(this.global_connections_list);
+        console.log(this.species);
+        console.log(this.mating_pool);
+        // debugger;
         this.generation++
         // let a = this.population[0].crossover(this.population[1]);
         // console.log(a);

@@ -50,6 +50,9 @@ function Genome(){
                     let output_obj = node.getOutput();
                     for(let output_index=0; output_index<output_obj.outputs.length; output_index++){
                         let output_node_index = this.getNode(output_obj.output_nodes[output_index]);
+                        // console.log(output_obj)
+                        // console.log(output_node_index);
+                        // console.log(this.nodes_list)
                         this.nodes_list[output_node_index].input_sum += output_obj.outputs[output_index];
                     }
                 }
@@ -115,6 +118,7 @@ function Genome(){
             if(Math.random() < this.mutation_rate){
                 let first_mutate_obj = {};
                 let in_node_index = this.getNode(this.connections_list[i].in_node);
+                console.log(this.connections_list);
                 first_mutate_obj.smaller_layer = this.nodes_list[in_node_index].layer_num;
                 first_mutate_obj.connection = this.connections_list[i].copy();
                 mutate_nodes_list.push(first_mutate_obj);
