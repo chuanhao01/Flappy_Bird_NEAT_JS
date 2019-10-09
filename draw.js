@@ -1,7 +1,7 @@
 let population = new Population();
 
-let total_pop = 1000,
-mutation_rate = 0.005;
+let total_pop = 200,
+mutation_rate = 0.05;
 
 // let new_node = new Node();
 // console.log(new_node);
@@ -107,25 +107,44 @@ function setup(){
     population.firstGen(2, 1);
     Game.setUpBirds(population.population);
 
+    
+
     // let birds = population.population;
     // for(let bird of birds){
     //     console.log(bird.brain.connections_list[0].weight);
     // }
-    // let bird = birds[0];
+    // let bird_a = birds[0],
+    // bird_b = birds[1];
+    // console.log(bird_a.brain.connections_list, bird_b.brain.connections_list);
+    // population.getDistance(bird_a.brain, bird_b.brain)
 
     // console.log(bird);
     // let genome = bird.brain;
     
+    // let connection_a = new Connection();
+    // connection_a.init(1, 2, 1, true);
+    // connection_a.setInnovationNumber(10);
+    // let connection_b = new Connection();
+    // connection_b.init(1, 2, 1, true);
+    // connection_b.setInnovationNumber(5);
+    // genome.connections_list.push(connection_a);
+    // genome.connections_list.push(connection_b);
+    // genome.sortConnections();
     // console.log(genome);
 }
 
-// let nope = true;
+let nope = true;
 
 function draw(){
     background(0);
     let is_game_done = Game.updateFrame();
-    if(is_game_done){
-        
+    if(is_game_done && nope){
+        population.generateSpecies();
+        population.prunePopulation();
+        population.setAdjustedScores();
+        population.generateMatingPool();
+        population.generateOffspring();
+        nope = false;
     }
     // let what = Game.updateFrame();
     // if(what && nope){

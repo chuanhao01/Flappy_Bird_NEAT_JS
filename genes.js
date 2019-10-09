@@ -5,6 +5,9 @@ function Connection(){
         this.weight = weight; 
         this.enabled = enabled;
     };
+    this.setWeight = function(weight){
+        this.weight = weight; 
+    };
     this.setInnovationNumber = function(innovation_number){
         this.innovation_number = innovation_number;
     };
@@ -27,6 +30,11 @@ function Node(){
         this.input_sum = 0;
         this.output_connections = [];
         this.output_nodes = [];
+    };
+    this.copy = function(){
+        let new_node = new Node();
+        new_node.init(this.node_number, this.type, this.layer_num);
+        return new_node;
     };
     this.clearNode = function(){
         this.input_sum = 0;
@@ -64,6 +72,17 @@ function Node(){
     };
     this.getPureOutput = function(){
         return Activations.sigmoid(this.input_sum);
+    };
+}
+
+function Species(){
+    this.init = function(represent_bird){
+        this.all_birds = [];
+        this.represent_bird = represent_bird;
+        this.all_birds.push(this.represent_bird);
+    };
+    this.addGenome = function(bird){
+        this.all_birds.push(bird);
     };
 }
 

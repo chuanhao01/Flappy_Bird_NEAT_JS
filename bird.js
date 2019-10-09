@@ -7,6 +7,7 @@ function Bird(gravity, lift, air_res){
     this.rad = 50;
     this.vel = 0;
     this.game_score = 0;
+    this.adjusted_score = 0;
     this.enabled = true;
     this.generateBrain = function(first_gen, brain){
         if(first_gen){
@@ -16,6 +17,33 @@ function Bird(gravity, lift, air_res){
         else{
             this.brain = brain;
         }
+    };
+    this.mutateFirstAddNode = function(){
+        return this.brain.mutateFirstAddNode(); 
+    };
+    this.mutateSecondAddNode = function(final_add_connections, final_add_nodes){
+        this.brain.mutateSecondAddNode(final_add_connections, final_add_nodes);
+    };
+    this.mutateFirstAddConnection = function(){
+        return this.brain.mutateFirstAddConnection();
+    };
+    this.mutateSecondAddConnection = function(final_add_connections){
+        this.brain.mutateSecondAddConnection(final_add_connections);
+    };
+    this.crossover = function(brid_b){
+        let child_brain = null;
+        if(this.adjusted_score > brid_b.adjusted_score){
+            child_brain = this.brain.crossover(brid_b.brain);
+        }
+        else{
+            child_brain = brid_b.brain.crossover(this.brain);
+        }
+        let child_bird = new Bird(this.gravity, this.lift, this.air_res);
+        child_bird.generateBrain(false, child_brain);
+        return child_bird;
+    };
+    this.setAdjustedScore = function(adjusted_score){
+        this.adjusted_score = adjusted_score; 
     };
     this.think = function(){
         if(this.enabled){

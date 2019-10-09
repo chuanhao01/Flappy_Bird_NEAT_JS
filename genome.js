@@ -3,6 +3,7 @@ function Genome(){
         this.mutation_rate = mutation_rate;
         this.nodes_list = nodes_list;
         this.connections_list = connections_list;
+        this.sortConnections();
         this.max_layer = this.findMaxLayer();
         this.ori_score = 0;
     };
@@ -59,7 +60,139 @@ function Genome(){
             this.nodes_list[i].clearNode();
         }   
     };
-
+    this.sortConnections = function(){
+        this.connections_list.sort((connection_a, connection_b) => {
+            return connection_a.innovation_number - connection_b.innovation_number;
+        });
+    };
+    this.crossover = function(genome_b){
+        let a_connection_index = 0,
+        b_connection_index = 0;
+        let a_connections = this.connections_list,
+        b_connections = genome_b.connections_list;
+        let a_connections_num = a_connections.length,
+        b_connections_num = b_connections.length;
+        let child_connections = [];
+        while(true){
+            if(b_connection_index < b_connections_num){
+                if(a_connections[a_connection_index].innovation_number === b_connections[b_connection_index].innovation_number){
+                child_connections.push(a_connections[a_connection_index]);
+                a_connection_index++;
+                b_connection_index++;
+                }
+                else if(a_connections[a_connection_index].innovation_number > b_connections[b_connection_index].innovation_number){
+                    child_connections.push(b_connections[b_connection_index]);
+                    b_connection_index++;
+                }
+                else if(a_connections[a_connection_index].innovation_number < b_connections[b_connection_index].innovation_number){
+                    child_connections.push(a_connections[a_connection_index]);
+                    a_connection_index++;
+                }
+                if(a_connection_index === a_connections_num){
+                    break;
+                }
+            }
+            else{
+                child_connections.push(a_connections[a_connection_index]);
+                a_connection_index++;
+                if(a_connection_index === a_connections_num){
+                    break;
+                }
+            }
+        }
+        let child_genome = new Genome();
+        let new_nodes = [];
+        for(let node of this.nodes_list){
+            new_nodes.push(node.copy());
+        }
+        child_genome.init(this.mutation_rate, new_nodes, child_connections);
+        return child_genome;
+    };
+    this.mutateFirstAddNode = function(){
+        let mutate_nodes_list = [];
+        for(let i=0; i<this.connections_list.length; i++){
+            if(Math.random() < this.mutation_rate){
+                let first_mutate_obj = {};
+                let in_node_index = this.getNode(this.connections_list[i].in_node);
+                first_mutate_obj.smaller_layer = this.nodes_list[in_node_index].layer_num;
+                first_mutate_obj.connection = this.connections_list[i].copy();
+                mutate_nodes_list.push(first_mutate_obj);
+                // Disable connection afterwards
+                this.connections_list[i].enabled = false;
+            }
+        }
+        if(mutate_nodes_list.length !== 0){
+            return mutate_nodes_list;
+        }
+        else{
+            return null;
+        }
+    };
+    this.mutateSecondAddNode = function(final_add_connections, final_add_nodes){
+        for(let connection of final_add_connections){
+            this.connections_list.push(connection);
+        }
+        for(let node of final_add_nodes){
+            this.nodes_list.push(node);
+        }
+        this.max_layer = this.findMaxLayer();
+    };
+    this.getNodesFromLayer = function(layer_num){
+        if(layer_num > this.max_layer){
+            layer_num = -1;
+        }
+        let nodes_numbers = [];
+        for(let node of this.nodes_list){
+            if(node.layer_num === layer_num){
+                nodes_numbers.push(node.node_number);
+            }
+        }
+        // console.log(nodes_numbers);
+        return nodes_numbers;
+    };
+    this.checkConnectionValid = function(in_node, out_node){
+        for(let connection of this.connections_list){
+            if(connection.in_node === in_node && connection.out_node === out_node){
+                return false
+            }
+        }
+        return true;
+    };
+    this.mutateFirstAddConnection = function(){
+        let mutate_add_connection_list = [];
+        for(let i=0; i<this.nodes_list.length; i++){
+            let node = this.nodes_list[i];
+            if(node.layer_num !== -1){
+                if(Math.random() < this.mutation_rate){
+                    let next_nodes_numbers = this.getNodesFromLayer(node.layer_num + 1);
+                    let selected_out_node = random(next_nodes_numbers);
+                    // console.log(next_nodes_numbers);
+                    // console.log(this.nodes_list);
+                    // console.log(this.connections_list);
+                    if(this.checkConnectionValid(node.node_number, selected_out_node)){
+                        // console.log(next_nodes_numbers);
+                        mutate_add_connection_list.push({
+                            in_node: node.node_number,
+                            out_node: selected_out_node,
+                        });
+                    }
+                }
+            }
+        }
+        if(mutate_add_connection_list.length < 1){
+            return null;
+        }
+        else{
+            return mutate_add_connection_list;
+        }
+    };
+    this.mutateSecondAddConnection = function(final_add_connections){
+        for(let connection of final_add_connections){
+            this.connections_list.push(connection);
+        }
+        this.sortConnections();
+        // console.log(this.connections_list);
+    };
     // this.feedForward = function(inputs){
     //     for(let i=0; i<inputs.length; i++){
     //         this.nodes_list[i].input_sum = inputs[i]
