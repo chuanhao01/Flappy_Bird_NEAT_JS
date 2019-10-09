@@ -6,6 +6,7 @@ function Genome(){
         this.sortConnections();
         this.max_layer = this.findMaxLayer();
         this.ori_score = 0;
+        this.learning_rate = 0.1;
     };
     this.findMaxLayer = function(){
         let max_layer = this.nodes_list[0].layer_num;
@@ -192,6 +193,22 @@ function Genome(){
         }
         this.sortConnections();
         // console.log(this.connections_list);
+    };
+    this.mutateRest = function(){
+        for(let i=0; i<this.connections_list.length; i++){
+            if(this.connections_list[i].enabled){
+                if(Math.random() < this.mutation_rate){
+                    this.connections_list[i].weight += ((Math.random() * 4) - 2) * this.learning_rate;
+                }
+                if(Math.random() < this.mutation_rate){
+                    this.connections_list[i].weight = ((Math.random() * 4) - 2);
+                }
+                if(Math.random() < this.mutation_rate){
+                    this.connections_list[i].enabled = !this.connections_list[i].enabled;
+                    // console.log('Weight off lel', this.connections_list[i]);
+                }
+            }
+        }
     };
     // this.feedForward = function(inputs){
     //     for(let i=0; i<inputs.length; i++){

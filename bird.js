@@ -30,6 +30,9 @@ function Bird(gravity, lift, air_res){
     this.mutateSecondAddConnection = function(final_add_connections){
         this.brain.mutateSecondAddConnection(final_add_connections);
     };
+    this.mutateRest = function(){
+        this.brain.mutateRest();
+    };
     this.crossover = function(brid_b){
         let child_brain = null;
         if(this.adjusted_score > brid_b.adjusted_score){
@@ -45,10 +48,11 @@ function Bird(gravity, lift, air_res){
     this.setAdjustedScore = function(adjusted_score){
         this.adjusted_score = adjusted_score; 
     };
-    this.think = function(){
+    this.think = function(top_pipe, bottom_pipe, ){
         if(this.enabled){
-            this.brain.feedForward([this.y, this.vel]);
-            console.log(0 <= this.brain.getOutput() && this.brain.getOutput() <= 1);
+            // console.log(top_pipe, bottom_pipe)
+            this.brain.feedForward([this.y, this.vel, top_pipe, bottom_pipe]);
+            // console.log(0 <= this.brain.getOutput() && this.brain.getOutput() <= 1);
             if(this.brain.getOutput() > 0.9){
                 this.birdJump();
             }
@@ -150,15 +154,27 @@ const Game = {
         this.game_done = false;
         this.time = 0;
         this.birds = [];
+        let pipe = new Pipe(this.gap_size, this.w, this.speed);
+        pipe.createPipe();
+        this.pipes.push(pipe);
     },
     setUpBirds(population){
         this.birds = population;
     },
+    resetGame(){
+        this.pipes = [];
+        this.birds = [];
+        this.game_done = false;
+        this.time = 0;
+        let pipe = new Pipe(this.gap_size, this.w, this.speed);
+        pipe.createPipe();
+        this.pipes.push(pipe);
+    },
     updateFrame(){
         if(!this.game_done){
             this.time++;
-            if(frameCount % 30 === 0){
-                console.log('It\'s a me, Mario');
+            if(frameCount % 75 === 0){
+                // console.log('It\'s a me, Mario');
                 let pipe = new Pipe(this.gap_size, this.w, this.speed);
                 pipe.createPipe();
                 this.pipes.push(pipe);
@@ -185,7 +201,7 @@ const Game = {
                 if(this.birds[i].enabled){
                     is_done = false;
                     if(this.birds[i].checkCollision()){
-                        this.birds[i].think();
+                        this.birds[i].think(this.pipes[0].top, this.pipes[0].bottom);
                         this.birds[i].updateBird();
                         this.birds[i].drawBird();
                     }

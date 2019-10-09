@@ -59,7 +59,7 @@ function Node(){
             }
         }
         else{
-            for(let connection of output_connections){
+            for(let connection of this.output_connections){
                 let output = this.input_sum * connection.weight;
                 output = Activations.sigmoid(output);
                 outputs.push(output);

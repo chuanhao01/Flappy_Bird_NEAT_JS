@@ -14,6 +14,7 @@ function Population(){
         this.c3 = 1;
         this.compatibility_threshold = 1;
         this.prune_percentage = 0.15;
+        this.generation = 1;
         // For generating the first generation
     };
     this.firstGen = function(input_nodes, output_nodes){
@@ -107,34 +108,51 @@ function Population(){
         b_connection_len = b_connections.length;
         let same_connections_number = 0;
         while(true){
-            // console.log(a_connections[a_index].innovation_number)
-            // console.log(b_connections[b_index].innovation_number)
+            // console.log(a_connections);
+            // console.log(a_connections[a_index].innovation_number, 'i will be back')
+            // console.log(b_connections[b_index].innovation_number, 'I am beeee')
             // console.log(a_index, b_index)
             // console.log(a_connection_len-1, 'he')
-            if(a_connections[a_index].innovation_number === b_connections[b_index].innovation_number){
-                total_w_diff = Math.abs(a_connections[a_index].weight - b_connections[b_index].weight);
-                a_index++;
-                b_index++;
-                same_connections_number++;
+            if(a_index !== a_connection_len && b_index !== b_connection_len){
+                // console.log(a_index, a_connection_len, 'nnananan')
+                // console.log(b_index, b_connection_len, 'nbnbnbnbnb');
+                if(a_connections[a_index].innovation_number === b_connections[b_index].innovation_number){
+                    total_w_diff = Math.abs(a_connections[a_index].weight - b_connections[b_index].weight);
+                    a_index++;
+                    b_index++;
+                    same_connections_number++;
+                }
+                else if(a_connections[a_index].innovation_number < b_connections[b_index].innovation_number){
+                    disjoint++;
+                    if(a_index !== a_connection_len - 1){
+                        a_index++;
+                    }
+                }
+                else if(a_connections[a_index].innovation_number > b_connections[b_index].innovation_number){
+                    if(b_index === b_connection_len - 1){
+                        excess++;
+                    }
+                    else{
+                        disjoint++;
+                        b_index++;
+                    }
+                }
             }
-            else if(a_connections[a_index].innovation_number < b_connections[b_index].innovation_number){
-                disjoint++;
-                if(a_index !== a_connection_len - 1){
+            else{
+                if(a_index === a_connection_len && b_index === b_connection_len){
+                    break;
+                }
+                else if(a_index === a_connection_len){
+                    excess++;
+                    b_index++;
+                }
+                else if(b_index === b_connection_len){
+                    disjoint++;
                     a_index++;
                 }
             }
-            else if(a_connections[a_index].innovation_number > b_connections[b_index].innovation_number){
-                if(b_index === b_connection_len - 1){
-                    excess++;
-                }
-                else{
-                    disjoint++;
-                    b_index++;
-                }
-            }
-            if(a_index === a_connection_len && b_index === b_connection_len){
-                break;
-            }
+            // console.log(a_index, a_connection_len, 'noooooo');
+            // console.log(b_index, b_connection_len, 'nbnbnbnbnbnbn');
         }
         let N = 1;
         if(a_connection_len >= 20 || b_connection_len >= 20){
@@ -330,15 +348,21 @@ function Population(){
             this.mutateSecondAddConnection(child_bird, first_mutate_connection_list);
             // console.log(first_mutate_connection_list);
         }
-        
+        child_bird.mutateRest();
+
     };
     this.generateOffspring = function(){
+        let new_population = [];
         for(let i=0; i<this.total_pop; i++){
             let bird_a = this.mating_pool[Math.floor(Math.random() * this.mating_pool.length)],
             bird_b = this.mating_pool[Math.floor(Math.random() * this.mating_pool.length)];
             let child_bird = bird_a.crossover(bird_b);
-            child_bird = this.mutateBird(child_bird);
+            this.mutateBird(child_bird);
+            new_population.push(child_bird);
         }
+        this.population = new_population;
+        console.log('Generation:', this.generation);
+        this.generation++
         // let a = this.population[0].crossover(this.population[1]);
         // console.log(a);
     };

@@ -1,6 +1,6 @@
 let population = new Population();
 
-let total_pop = 200,
+let total_pop = 50,
 mutation_rate = 0.05;
 
 // let new_node = new Node();
@@ -104,7 +104,7 @@ function setup(){
     createCanvas(400, 600);
     Game.init();
     population.init(total_pop, mutation_rate);
-    population.firstGen(2, 1);
+    population.firstGen(4, 1);
     Game.setUpBirds(population.population);
 
     
@@ -133,19 +133,36 @@ function setup(){
     // console.log(genome);
 }
 
-let nope = true;
+// let nope = true;
 
 function draw(){
     background(0);
     let is_game_done = Game.updateFrame();
-    if(is_game_done && nope){
+    if(is_game_done){
         population.generateSpecies();
         population.prunePopulation();
         population.setAdjustedScores();
         population.generateMatingPool();
         population.generateOffspring();
-        nope = false;
+        Game.resetGame();
+        Game.setUpBirds(population.population);
     }
+    // if(is_game_done){
+    //     Game.resetGame();
+    //     for(let bird of population.population){
+    //         bird.enabled = true;
+    //     }
+    //     Game.setUpBirds(population.population);
+    //     console.log('i should be once')
+    // }
+    // if(is_game_done && nope){
+    //     population.generateSpecies();
+    //     population.prunePopulation();
+    //     population.setAdjustedScores();
+    //     population.generateMatingPool();
+    //     population.generateOffspring();
+    //     nope = false;
+    // }
     // let what = Game.updateFrame();
     // if(what && nope){
     //     for(let bird of population.population){
