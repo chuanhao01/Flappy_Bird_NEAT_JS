@@ -2,6 +2,7 @@ function Genome(){
     this.init = function(nodes_list, connections_list){
         this.nodes_list = nodes_list;
         this.connections_list = connections_list;
+        this.real_connection_list = [];
         this.sortConnections();
     };
     this.sortConnections = function(){
@@ -24,9 +25,6 @@ function Genome(){
                 }
             }
             console.log(curr_layer)
-            for(let node of curr_layer){
-                
-            }
         }
         // console.log(max_layer);
         // console.log(nodes_needed);
@@ -40,6 +38,9 @@ function Genome(){
             }
         }
         return max_layer;
+    };
+    this.makeRealConnection = function(){
+        
     };
     this.connectNodes = function(){
         let nodes_needed = [];

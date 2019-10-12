@@ -1,6 +1,6 @@
 let population = new Population();
 
-let total_pop = 50,
+let total_pop = 1000,
 mutation_rate = 0.005;
 
 // let new_node = new Node();
@@ -102,28 +102,38 @@ mutation_rate = 0.005;
 
 function setup(){
     createCanvas(400, 600);
-    // Game.init();
+    Game.init();
     population.init(total_pop, mutation_rate);
     population.firstGen(2, 1);
-    // Game.setUpBirds(population.population);
+    Game.setUpBirds(population.population);
 
-    let birds = population.population;
-    for(let bird of birds){
-        console.log(bird.brain.connections_list[0].weight);
-    }
-    let bird = birds[0];
+    // let birds = population.population;
+    // for(let bird of birds){
+    //     console.log(bird.brain.connections_list[0].weight);
+    // }
+    // let bird = birds[0];
 
-    console.log(bird);
-    let genome = bird.brain;
+    // console.log(bird);
+    // let genome = bird.brain;
     
-    console.log(genome);
+    // console.log(genome);
 }
 
-
-let check = false
+// let nope = true;
 
 function draw(){
     background(0);
-    // Game.updateFrame();
+    let is_game_done = Game.updateFrame();
+    if(is_game_done){
+        
+    }
+    // let what = Game.updateFrame();
+    // if(what && nope){
+    //     for(let bird of population.population){
+    //         console.log(bird.game_score);
+    //     }
+    //     nope = false;
+    // }
 }
+
 

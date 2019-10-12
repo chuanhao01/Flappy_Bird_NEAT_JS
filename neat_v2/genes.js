@@ -11,6 +11,12 @@ function Connection(){
     this.fwdFeed = function(node_input){
         return node_input * this.weight;
     };
+    this.copy = function(){
+        let connection = new Connection();
+        connection.init(this.in_node, this.out_node, this.weight, this.enabled);
+        connection.setInnovationNumber(this.innovation_number);
+        return connection;
+    }
 }
 
 function Node(){
