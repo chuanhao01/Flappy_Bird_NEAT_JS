@@ -1,4 +1,4 @@
-let total_pop = 50, mutation_rate = 0.05;
+let total_pop = 1000, mutation_rate = 0.05;
 
 let population = new Population();
 population.init(total_pop, mutation_rate);

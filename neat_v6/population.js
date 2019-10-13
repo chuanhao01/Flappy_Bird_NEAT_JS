@@ -13,12 +13,12 @@ function Population(){
         this.crossover_population = [];
         this.c1 = 1;
         this.c2 = 0.5;
-        this.compatibility_threshold = 3;
-        this.prune_percentage = 0.50;
+        this.compatibility_threshold = 2.5;
+        this.prune_percentage = 0.5;
         this.generation = 1;
         // For the bird and game
-        this.gravity = 0.6;
-        this.lift = -20;
+        this.gravity = 0.7;
+        this.lift = -5;
         this.air_res = 0.9;
     };
     this.cloneGlobalNodeHistory = function(){
@@ -240,11 +240,36 @@ function Population(){
         }
         this.mating_pool = mating_pool;
     };
+    this.selectFromSameSpecies = function(){
+        let bird_a = this.mating_pool[Math.floor(random(this.mating_pool.length))],
+        bird_b = this.mating_pool[Math.floor(random(this.mating_pool.length))];
+        while(true){
+            let a_spec_index = 0,
+            b_spec_index = 0;
+            for(let i=0; i<this.all_species_list.length; i++){
+                let species = this.all_species_list[i]
+                for(let bird of species.population){
+                    if(bird === bird_a){
+                        a_spec_index = i;
+                    }
+                    if(bird === bird_b){
+                        b_spec_index = i;
+                    }
+                }
+            }
+            if(a_spec_index === b_spec_index){
+                return [bird_a, bird_b];     
+            }
+            bird_a = this.mating_pool[Math.floor(random(this.mating_pool.length))];
+            bird_b = this.mating_pool[Math.floor(random(this.mating_pool.length))];
+        }
+    };
     this.crossoverPopulation = function(){
         let crossover_population = [];
         for(let i=0; i<this.total_pop; i++){
-            let bird_a = this.mating_pool[Math.floor(random(this.mating_pool.length))],
-            bird_b = this.mating_pool[Math.floor(random(this.mating_pool.length))];
+            let selected_birds = this.selectFromSameSpecies();
+            let bird_a = selected_birds[0],
+            bird_b = selected_birds[1];
             let child_bird;
             if(bird_a.adjusted_score > bird_b.adjusted_score){
                 child_bird = bird_a.crossover(bird_b);
@@ -267,7 +292,10 @@ function Population(){
         }
         this.updateGlobalNodeAndInnovation();
         console.log(`Generation: ${this.generation}`);
+        console.log(this.global_node_history_list);
+        console.log(this.global_connection_history_list)
         console.log(this.all_species_list);
+        console.log('One example', this.population);
         this.generation++;
         this.population = this.crossover_population;
     };

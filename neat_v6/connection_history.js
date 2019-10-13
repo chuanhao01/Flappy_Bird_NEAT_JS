@@ -6,7 +6,6 @@ function ConnectionHistory(){
         this.weight = weight;
         this.innovation_number = innovation_number;
         this.enabled = true
-        this.cannot_come_back = false;
     };
     this.clone = function(){
         let new_connection_history = new ConnectionHistory();
