@@ -12,7 +12,7 @@ I still don't know why I did this, but here is my native Javascript implementati
 
 Working version is in the neat_v6 folder.
 
-A link to see it working on learning to play flappy bird can be seen [here](https://chuanhao01.github.io/Javascript_NEAT/neat_v6/).  
+A link to see it working on learning to play flappy bird can be seen [here](https://chuanhao01.github.io/Javascript_NEAT/).  
 
 
 Note, DO NOT LEAVE IT RUNNING FOREVER. My memory allocation and management is still shit so your google chrome might crash.  
