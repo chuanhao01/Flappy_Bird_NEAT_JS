@@ -1,4 +1,4 @@
-# Javascript_NEAT
+# FLAPPY_BIRD_NEAT_JS
 Hello there, this was a mini side project I did as I was interested in the field of reinforcement learning as well as genetic algorithms.  
 
 After doing the [XVis Tool Project](https://github.com/chuanhao01/XVis_Tool) during my internship at DSTA, this paper on gentic algorithms, particularly neuro evolution, which allowed a Neural Network to evolve and grow seemed pretty cool.  
