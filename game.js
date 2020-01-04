@@ -11,6 +11,7 @@ function Game(){
         let pipe = new Pipe(this.gap_size, this.w, this.speed);
         pipe.createPipe();
         this.pipes.push(pipe);
+        this.score_show = 0;
     };
     this.setUpBirds = function(birds){
         this.birds = birds;
@@ -20,11 +21,12 @@ function Game(){
         this.birds = [];
         this.game_done = false;
         this.time = 0;
+        this.score_show = 0;
         let pipe = new Pipe(this.gap_size, this.w, this.speed);
         pipe.createPipe();
         this.pipes.push(pipe);
     };
-    this.updateFrame = function(){
+    this.updateFrame = function(img1, img2, img3, img4, img5){
         if(!this.game_done){
             this.time++;
             if(this.pipes[this.pipes.length - 1].x < width - 400){
@@ -36,6 +38,7 @@ function Game(){
                 for(let i=this.pipes.length - 1; i>=0; i--){
                     if(this.pipes[i].pipeOffScreen()){
                         this.pipes.splice(i, 1);
+                        this.score_show++;
                     }
                     for(let j=0; j<this.birds.length; j++){
                         if(this.birds[j].player.enabled){
@@ -48,7 +51,7 @@ function Game(){
                         }
                     }
                     this.pipes[i].updatePipe();
-                    this.pipes[i].drawPipe();
+                    this.pipes[i].drawPipe(img4, img5);
                 }
             }
             let is_done = true;
@@ -58,7 +61,7 @@ function Game(){
                     if(this.birds[i].checkCollision()){
                         this.birds[i].think(this.pipes[0].top, this.pipes[0].bottom, this.pipes[0].x);
                         this.birds[i].updateBird();
-                        this.birds[i].drawBird();
+                        this.birds[i].drawBird(img1, img2, img3);
                     }
                     else{
                         this.birds[i].player.setScore(this.time);
