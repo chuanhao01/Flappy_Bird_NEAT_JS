@@ -8,7 +8,7 @@ function Pipe(gap_size, w, speed){
     this.highlight = false;
     this.createPipe = () => {
         remaining_length = height - this.gap_size;
-        this.top = random(remaining_length);
+        this.top = random(remaining_length - 100) + 30;
         this.bottom = this.top + this.gap_size; 
     };
     this.drawPipe = () => {

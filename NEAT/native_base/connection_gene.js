@@ -5,6 +5,6 @@ function ConnectionGene(){
         this.out_node = out_node;
         this.weight = weight;
         this.innovation_number = innovation_number;
-        this.enabled = true
+        this.enabled = true;
     };
 }
