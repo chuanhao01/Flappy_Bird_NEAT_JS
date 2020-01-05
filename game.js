@@ -29,7 +29,7 @@ function Game(){
     this.updateFrame = function(img1, img2, img3, img4, img5){
         if(!this.game_done){
             this.time++;
-            if(this.pipes[this.pipes.length - 1].x < width - 400){
+            if(this.pipes[this.pipes.length - 1].x < WIDTH - 400){
                 let pipe = new Pipe(this.gap_size, this.w, this.speed);
                 pipe.createPipe();
                 this.pipes.push(pipe);

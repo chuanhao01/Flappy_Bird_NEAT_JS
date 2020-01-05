@@ -1,6 +1,12 @@
 const population = new Population();
 const game = new Game();
 
+const WIDTH = 400,
+HEIGHT = 600;
+
+let best_player,
+nv = new NEAT_VISUAL();
+
 const bird_configs = {
     gravity: 0.6,
     lift: -14,
@@ -31,7 +37,7 @@ function setup(){
         birds.push(bird);
     }
 
-    createCanvas(400, 600);
+    createCanvas(2000, 2000);
     background(0);
 
     game.init();
@@ -39,18 +45,28 @@ function setup(){
 }
 
 function draw(){
-    image(backgroundImg, 0, 0, width, height);
+    background(0);
+    image(backgroundImg, 0, 0, WIDTH, HEIGHT);
     // Adding population generation
     textSize(30);
-    text(`Gen: ${population.generation}`, width - 130, height - 90);
     fill(0);
+    text(`Gen: ${population.generation}`, WIDTH - 130, HEIGHT - 90);
     // Adding the score 
     textSize(30);
-    text(`Score: ${game.score_show}`, width - 130, height - 50);
     fill(0);
-    for(let i=0; i<5; i++){
+    text(`Score: ${game.score_show}`, WIDTH - 130, HEIGHT - 50);
+    for(let i=0; i<1; i++){
         let is_done = game.updateFrame(birdFlappingUpImg, birdMidFlapImg, birdFlappingDownImg, pipeHeadImg, shaftImg);
+        if(best_player){
+            nv.getModelVisual();
+        }
         if(is_done){
+            // Drawing model
+            best_player = population.getBestPlayer();
+            nv.init(best_player, {
+                'x': 0,
+                'y': 650
+            });
             population.getNewPopulation();
             birds = [];
             for(let i=0; i<population.population.length; i++){

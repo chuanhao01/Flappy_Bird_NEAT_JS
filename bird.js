@@ -3,7 +3,7 @@ function Bird(gravity, lift, air_res){
     this.lift = lift;
     this.air_res = air_res;
     this.x = 50;
-    this.y = height/2;
+    this.y = HEIGHT/2;
     this.rad = 26;
     this.vel = 0;
 
@@ -76,7 +76,7 @@ function Bird(gravity, lift, air_res){
         this.y += this.vel;
     };
     this.checkCollision = function(){
-        if(0 < this.y && this.y < height){
+        if(0 < this.y && this.y < HEIGHT){
             return true;
         }
         else{

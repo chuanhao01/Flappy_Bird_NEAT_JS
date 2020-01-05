@@ -4,10 +4,10 @@ function Pipe(gap_size, w, speed){
     this.speed = speed;
     this.top = null;
     this.bottom = null;
-    this.x = width;
+    this.x = WIDTH;
     this.highlight = false;
     this.createPipe = () => {
-        let remaining_length = height - this.gap_size;
+        let remaining_length = HEIGHT - this.gap_size;
         this.top = random(remaining_length - 100) + 30;
         this.bottom = this.top + this.gap_size; 
     };
@@ -19,7 +19,7 @@ function Pipe(gap_size, w, speed){
         // // Top rect
         // rect(this.x, 0, this.w, this.top);
         // // Bottom
-        // rect(this.x, this.bottom, this.w, height - this.bottom);
+        // rect(this.x, this.bottom, this.w, HEIGHT - this.bottom);
         push();
         image(pipeHeadImg, this.x - 4, this.top, this.w + 8, 14);
         image(shaftImg, this.x, 0, this.w, this.top);
@@ -27,10 +27,10 @@ function Pipe(gap_size, w, speed){
         
         push();
         image(pipeHeadImg, this.x - 4, this.bottom - 14, this.w + 8, 14);
-        image(shaftImg, this.x, this.bottom, this.w, height - this.bottom);
+        image(shaftImg, this.x, this.bottom, this.w, HEIGHT - this.bottom);
 
         // image(pipeHeadImg, xOfPipeHead, this.y, PIPE_HEAD_WIDTH, PIPE_HEAD_HEIGHT);
-        // image(shaftImg, this.x, this.y + PIPE_HEAD_HEIGHT, this.width, this.height - PIPE_HEAD_HEIGHT);
+        // image(shaftImg, this.x, this.y + PIPE_HEAD_HEIGHT, this.WIDTH, this.HEIGHT - PIPE_HEAD_HEIGHT);
         pop();
     };
     this.updatePipe = () => {
