@@ -64,8 +64,8 @@ function draw(){
             // Drawing model
             best_player = population.getBestPlayer();
             nv.init(best_player, {
-                'x': 0,
-                'y': 650
+                'x': 450,
+                'y': 0
             });
             population.getNewPopulation();
             birds = [];
